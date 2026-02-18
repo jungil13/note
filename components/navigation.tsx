@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Calendar, CheckSquare, Settings, StickyNote, Music2 } from "lucide-react"
+import { Calendar, CheckSquare, Settings, StickyNote, Music2, Navigation2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -26,6 +26,11 @@ const navItems = [
         href: "/music",
         icon: Music2,
         label: "Music",
+    },
+    {
+        href: "/traffic",
+        icon: Navigation2,
+        label: "Traffic",
     },
     {
         href: "/settings",
