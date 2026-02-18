@@ -70,7 +70,7 @@ export function ChatBot() {
         <>
             {/* Floating Toggle Button */}
             <motion.div
-                className="fixed bottom-24 right-6 z-40"
+                className="fixed bottom-24 left-6 z-40"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
             >
@@ -112,7 +112,7 @@ export function ChatBot() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.9 }}
                         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                        className="fixed bottom-40 right-6 left-6 md:left-auto md:w-[400px] h-[500px] z-50 rounded-3xl bg-card border shadow-2xl flex flex-col overflow-hidden"
+                        className="fixed bottom-40 left-6 right-6 md:right-auto md:w-[400px] h-[500px] z-50 rounded-3xl bg-card border shadow-2xl flex flex-col overflow-hidden"
                     >
                         {/* Header */}
                         <div className="p-4 bg-primary text-primary-foreground flex items-center justify-between">
@@ -146,8 +146,8 @@ export function ChatBot() {
                                     className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                                 >
                                     <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.sender === 'user'
-                                            ? 'bg-primary text-primary-foreground rounded-tr-none'
-                                            : 'bg-muted text-foreground rounded-tl-none'
+                                        ? 'bg-primary text-primary-foreground rounded-tr-none'
+                                        : 'bg-muted text-foreground rounded-tl-none'
                                         }`}>
                                         {msg.text}
                                     </div>
