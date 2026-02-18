@@ -30,12 +30,21 @@ export function TrafficTracker() {
             const offset = 0.1 // approx 11km
             const bbox = `${lng - offset},${lat - offset},${lng + offset},${lat + offset}`
             const apiKey = process.env.NEXT_PUBLIC_TOMTOM_API_KEY
+            const fields = "{incidents{type,properties{id,magnitudeOfDelay,events{description},incidentCategory,length,delay,lastReportTime}}}"
 
-            const response = await fetch(
-                `https://api.tomtom.com/traffic/services/5/incidentDetails?key=${apiKey}&bbox=${bbox}&fields={incidents{type,geometry{type,coordinates},properties{id,iconCategory,magnitudeOfDelay,events{description,code},tmc{status},clusterSize,incidentCategory,from,to,length,delay,lastReportTime}}}&language=en-GB`
-            )
+            const url = new URL("https://api.tomtom.com/traffic/services/5/incidentDetails")
+            url.searchParams.append("key", apiKey || "")
+            url.searchParams.append("bbox", bbox)
+            url.searchParams.append("fields", fields)
+            url.searchParams.append("language", "en-GB")
 
-            if (!response.ok) throw new Error("Failed to fetch traffic data")
+            const response = await fetch(url.toString())
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}))
+                console.error("TomTom API Error Details:", errorData)
+                throw new Error(`Traffic API error: ${response.status}`)
+            }
 
             const data = await response.json()
 
