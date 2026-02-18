@@ -1,7 +1,7 @@
 {
-    "name": "Note & Organizer",
-    "short_name": "NoteApp",
-    "description": "All-in-One Note & Organizer App with Music Player",
+    "name": "Nova: Note & Traffic Tracker",
+    "short_name": "Nova",
+    "description": "Premium Note Organizer & Real-time Traffic Tracker",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",

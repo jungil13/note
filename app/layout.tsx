@@ -6,6 +6,7 @@ import { AuthProvider } from "@/components/auth-provider";
 import { Navigation } from "@/components/navigation";
 import { InstallPWA } from "@/components/pwa-install";
 import { ChatBot } from "@/components/chatbot";
+import { LoadingAnimation } from "@/components/loading-animation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,8 +26,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Note & Organizer",
-  description: "All-in-One Note & Organizer App",
+  title: "Nova: Note & Traffic Tracker",
+  description: "Premium Note Organizer & Real-time Traffic Tracker",
 };
 
 export default function RootLayout({
@@ -43,7 +44,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#8b5cf6" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="NoteApp" />
+        <meta name="apple-mobile-web-app-title" content="Nova" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased pb-20`}
@@ -59,6 +60,7 @@ export default function RootLayout({
             <Navigation />
             <InstallPWA />
             <ChatBot />
+            <LoadingAnimation />
           </ThemeProvider>
         </AuthProvider>
         <script
