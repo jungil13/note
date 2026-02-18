@@ -21,6 +21,11 @@ export function TrafficTracker() {
     const [error, setError] = useState<string | null>(null)
     const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null)
     const [lastRefresh, setLastRefresh] = useState<Date>(new Date())
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     const fetchTrafficData = useCallback(async (lat: number, lng: number) => {
         const apiKey = process.env.NEXT_PUBLIC_TOMTOM_API_KEY
@@ -117,7 +122,7 @@ export function TrafficTracker() {
                     </h2>
                     <p className="text-xs text-muted-foreground flex items-center gap-1 font-medium uppercase tracking-wider">
                         <Clock className="h-3 w-3" />
-                        Updated {lastRefresh.toLocaleTimeString()}
+                        Updated {mounted ? lastRefresh.toLocaleTimeString() : "--:--:--"}
                     </p>
                 </div>
                 <Button
