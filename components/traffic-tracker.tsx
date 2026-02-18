@@ -23,27 +23,31 @@ export function TrafficTracker() {
     const [lastRefresh, setLastRefresh] = useState<Date>(new Date())
 
     const fetchTrafficData = useCallback(async (lat: number, lng: number) => {
+        const apiKey = process.env.NEXT_PUBLIC_TOMTOM_API_KEY
+
+        if (!apiKey) {
+            setError("TomTom API Key is missing. Please add NEXT_PUBLIC_TOMTOM_API_KEY to your .env.local and RESTART your dev server (npm run dev).")
+            setLoading(false)
+            return
+        }
+
         setLoading(true)
         setError(null)
         try {
-            // Calculate a simple bounding box around the user (approx 10km)
-            const offset = 0.1 // approx 11km
+            // Calculate a simple bounding box
+            const offset = 0.1
             const bbox = `${lng - offset},${lat - offset},${lng + offset},${lat + offset}`
-            const apiKey = process.env.NEXT_PUBLIC_TOMTOM_API_KEY
             const fields = "{incidents{type,properties{id,magnitudeOfDelay,events{description},incidentCategory,length,delay,lastReportTime}}}"
 
-            const url = new URL("https://api.tomtom.com/traffic/services/5/incidentDetails")
-            url.searchParams.append("key", apiKey || "")
-            url.searchParams.append("bbox", bbox)
-            url.searchParams.append("fields", fields)
-            url.searchParams.append("language", "en-GB")
+            // Construct URL - using template literal to be absolutely sure about encoding
+            const url = `https://api.tomtom.com/traffic/services/5/incidentDetails?key=${apiKey}&bbox=${bbox}&fields=${encodeURIComponent(fields)}&language=en-GB`
 
-            const response = await fetch(url.toString())
+            const response = await fetch(url)
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}))
+                const errorData = await response.json().catch(() => ({ message: "Unknown error" }))
                 console.error("TomTom API Error Details:", errorData)
-                throw new Error(`Traffic API error: ${response.status}`)
+                throw new Error(`Traffic API error ${response.status}: ${errorData.message || response.statusText}`)
             }
 
             const data = await response.json()
