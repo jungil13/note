@@ -34,7 +34,18 @@ export default function MusicPage() {
     const [player, setPlayer] = useState<any>(null)
     const [isPremium, setIsPremium] = useState<boolean | null>(null)
     const [isSDKReady, setIsSDKReady] = useState(false)
+    const [isMobile, setIsMobile] = useState(false)
     const audioRef = useRef<HTMLAudioElement | null>(null)
+
+    // Detect mobile environment
+    useEffect(() => {
+        const checkMobile = () => {
+            const userAgent = typeof window !== 'undefined' ? navigator.userAgent : ''
+            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)
+            setIsMobile(isMobileDevice)
+        }
+        checkMobile()
+    }, [])
 
     // Ensure SDK global handler exists even if not authenticated yet
     useEffect(() => {
@@ -132,6 +143,18 @@ export default function MusicPage() {
         }
 
         setErrorMsg(null)
+
+        // Force Embed Mode for Mobile (SDK doesn't support mobile browsers)
+        if (isMobile) {
+            console.log("Mobile detected: Forcing Embed Mode")
+            setPlaybackMode('embed')
+            setCurrentTrack(result)
+            if (audioRef.current) {
+                audioRef.current.pause()
+                audioRef.current.src = ""
+            }
+            return
+        }
 
         // Try Full Playback if authenticated via SDK AND we haven't confirmed they are non-Premium
         if (status === 'authenticated' && session?.accessToken && isPremium !== false) {
