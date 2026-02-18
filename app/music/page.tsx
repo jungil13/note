@@ -413,26 +413,62 @@ export default function MusicPage() {
                                     }}
                                 />
 
-                                <div className="flex flex-col md:flex-row gap-8 items-center md:items-stretch">
-                                    <div className="relative group flex-shrink-0">
-                                        <img
-                                            src={currentTrack.albumArt}
-                                            alt={currentTrack.name}
-                                            width={240}
-                                            height={240}
-                                            className="w-48 h-48 md:w-60 md:h-60 rounded-xl shadow-2xl transition-transform group-hover:scale-105 duration-500"
+                                <div className="flex flex-col md:flex-row gap-8 items-center md:items-stretch relative">
+                                    {/* Visualizer Aura */}
+                                    {isPlaying && (
+                                        <motion.div
+                                            animate={{
+                                                scale: [1, 1.2, 1],
+                                                opacity: [0.15, 0.3, 0.15]
+                                            }}
+                                            transition={{
+                                                duration: 3,
+                                                repeat: Infinity,
+                                                ease: "easeInOut"
+                                            }}
+                                            className="absolute -inset-10 bg-primary/40 blur-[100px] rounded-full -z-20 pointer-events-none"
                                         />
-                                        {isPlaying && (
-                                            <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl">
-                                                <div className="flex gap-1">
-                                                    {[1, 2, 3, 4].map(i => (
-                                                        <div key={i} className={`w-1 bg-white rounded-full animate-music-bar h-8 delay-${i * 100}`}
-                                                            style={{ animationDelay: `${i * 150}ms`, height: `${10 + Math.random() * 20}px` }}
-                                                        />
-                                                    ))}
+                                    )}
+
+                                    <div className="relative group flex-shrink-0">
+                                        <motion.div
+                                            animate={isPlaying ? { scale: [1, 1.02, 1] } : { scale: 1 }}
+                                            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                                            className="relative z-10"
+                                        >
+                                            <img
+                                                src={currentTrack.albumArt}
+                                                alt={currentTrack.name}
+                                                width={240}
+                                                height={240}
+                                                className="w-48 h-48 md:w-60 md:h-60 rounded-[32px] shadow-2xl transition-all group-hover:shadow-primary/20 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] duration-500"
+                                            />
+                                            {/* Music Bars Overlay */}
+                                            {isPlaying && (
+                                                <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-[32px] backdrop-blur-[2px]">
+                                                    <div className="flex gap-1.5 items-end h-12">
+                                                        {[...Array(6)].map((_, i) => (
+                                                            <motion.div
+                                                                key={i}
+                                                                animate={{
+                                                                    height: [
+                                                                        8 + Math.random() * 20,
+                                                                        20 + Math.random() * 20,
+                                                                        8 + Math.random() * 20
+                                                                    ]
+                                                                }}
+                                                                transition={{
+                                                                    duration: 0.4 + Math.random() * 0.4,
+                                                                    repeat: Infinity,
+                                                                    ease: "easeInOut"
+                                                                }}
+                                                                className="w-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                                                            />
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        )}
+                                            )}
+                                        </motion.div>
                                     </div>
 
                                     <div className="flex-1 flex flex-col justify-between text-center md:text-left min-w-0 py-2">

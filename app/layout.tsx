@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/auth-provider";
 import { Navigation } from "@/components/navigation";
 import { InstallPWA } from "@/components/pwa-install";
+import { ChatBot } from "@/components/chatbot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,6 +58,7 @@ export default function RootLayout({
             {children}
             <Navigation />
             <InstallPWA />
+            <ChatBot />
           </ThemeProvider>
         </AuthProvider>
         <script
