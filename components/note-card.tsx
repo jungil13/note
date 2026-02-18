@@ -16,9 +16,11 @@ import type { Note } from "@/hooks/use-notes"
 
 interface NoteCardProps {
     note: Note
+    authorName?: string
+    authorImage?: string | null
 }
 
-export function NoteCard({ note }: NoteCardProps) {
+export function NoteCard({ note, authorName, authorImage }: NoteCardProps) {
     return (
         <Link href={`/note/${note.id}`}>
             <motion.div
@@ -28,7 +30,17 @@ export function NoteCard({ note }: NoteCardProps) {
             >
                 <Card className="h-full overflow-hidden transition-colors hover:bg-muted/50">
                     <CardHeader className="p-4 pb-2">
-                        <CardTitle className="line-clamp-1 text-lg">{note.title || "Untitled Note"}</CardTitle>
+                        <div className="flex items-center justify-between gap-2">
+                            <CardTitle className="line-clamp-1 text-lg">{note.title || "Untitled Note"}</CardTitle>
+                            {authorName && (
+                                <span className="flex items-center gap-1.5 shrink-0 text-xs text-muted-foreground">
+                                    {authorImage && (
+                                        <img src={authorImage} alt="" className="h-5 w-5 rounded-full" />
+                                    )}
+                                    {authorName}
+                                </span>
+                            )}
+                        </div>
                         <CardDescription suppressHydrationWarning>
                             {formatDistanceToNow(note.updatedAt, { addSuffix: true })}
                         </CardDescription>
