@@ -15,7 +15,11 @@ interface TrafficIncident {
     lastUpdated: string
 }
 
-export function TrafficTracker() {
+interface TrafficTrackerProps {
+    onLocationDetected?: (coords: { lat: number; lng: number }) => void
+}
+
+export function TrafficTracker({ onLocationDetected }: TrafficTrackerProps) {
     const [incidents, setIncidents] = useState<TrafficIncident[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -85,6 +89,7 @@ export function TrafficTracker() {
                 (pos) => {
                     const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude }
                     setLocation(coords)
+                    onLocationDetected?.(coords)
                     fetchTrafficData(coords.lat, coords.lng)
                 },
                 (err) => {
