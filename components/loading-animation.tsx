@@ -38,7 +38,7 @@ export function LoadingAnimation() {
                             scale: [1, 1.2, 1],
                             opacity: [0.3, 0.5, 0.3]
                         }}
-                        transition={{ duration: 4, repeat: Double.POSITIVE_INFINITY }}
+                        transition={{ duration: 4, repeat: Infinity }}
                         className="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-blue-600/20 blur-[100px]"
                     />
 
@@ -54,7 +54,7 @@ export function LoadingAnimation() {
                             <motion.div
                                 className="absolute inset-0 rounded-3xl border-2 border-white/10"
                                 animate={{ opacity: [0, 0.5, 0] }}
-                                transition={{ duration: 2, repeat: Double.POSITIVE_INFINITY }}
+                                transition={{ duration: 2, repeat: Infinity }}
                             />
                         </motion.div>
 
