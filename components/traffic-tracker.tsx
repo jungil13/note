@@ -42,7 +42,7 @@ export function TrafficTracker() {
             // Calculate a simple bounding box
             const offset = 0.1
             const bbox = `${lng - offset},${lat - offset},${lng + offset},${lat + offset}`
-            const fields = "{incidents{type,properties{id,magnitudeOfDelay,events{description},incidentCategory,length,delay,lastReportTime}}}"
+            const fields = "{incidents{type,properties{id,magnitudeOfDelay,events{description},iconCategory,length,delay,lastReportTime}}}"
 
             // Construct URL - using template literal to be absolutely sure about encoding
             const url = `https://api.tomtom.com/traffic/services/5/incidentDetails?key=${apiKey}&bbox=${bbox}&fields=${encodeURIComponent(fields)}&language=en-GB`
@@ -52,7 +52,8 @@ export function TrafficTracker() {
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ message: "Unknown error" }))
                 console.error("TomTom API Error Details:", errorData)
-                throw new Error(`Traffic API error ${response.status}: ${errorData.message || response.statusText}`)
+                const msg = errorData.detailedError?.message || errorData.error?.message || errorData.message || response.statusText
+                throw new Error(`Traffic API error ${response.status}: ${msg}`)
             }
 
             const data = await response.json()
@@ -60,7 +61,7 @@ export function TrafficTracker() {
             // Map TomTom data to our interface
             const mappedIncidents: TrafficIncident[] = (data.incidents || []).map((inc: any) => ({
                 id: inc.properties.id,
-                type: inc.properties.incidentCategory || "Unknown",
+                type: inc.properties.iconCategory || "Unknown",
                 severity: inc.properties.magnitudeOfDelay || 0,
                 description: inc.properties.events?.[0]?.description || "Traffic Delay",
                 delay: inc.properties.delay || 0,
@@ -72,7 +73,7 @@ export function TrafficTracker() {
             setLastRefresh(new Date())
         } catch (err: any) {
             console.error("Traffic Error:", err)
-            setError("Unable to load traffic data. Check your API key or connection.")
+            setError(err.message || "Unable to load traffic data. Check your API key or connection.")
         } finally {
             setLoading(false)
         }
