@@ -1,3 +1,7 @@
+"use client"
+
+import { ModeToggle } from "@/components/mode-toggle"
+import { Separator } from "@/components/ui/separator"
 import { ArrowRight, Bell, HelpCircle, Lock, Monitor, Smartphone, User, ChevronDown, CheckCircle2, ShieldCheck, LifeBuoy } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useState } from "react"
