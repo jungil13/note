@@ -36,11 +36,20 @@ export default function MusicPage() {
     const [isSDKReady, setIsSDKReady] = useState(false)
     const audioRef = useRef<HTMLAudioElement | null>(null)
 
+    // Ensure SDK global handler exists even if not authenticated yet
+    useEffect(() => {
+        if (typeof window !== "undefined" && !(window as any).onSpotifyWebPlaybackSDKReady) {
+            (window as any).onSpotifyWebPlaybackSDKReady = () => {
+                console.log("Spotify SDK: Global handler defined (Stub)");
+            };
+        }
+    }, []);
+
     useEffect(() => {
         if (status !== 'authenticated' || !session?.accessToken) return
 
-        // Define the global callback for Spotify SDK
-        (window as any).onSpotifyWebPlaybackSDKReady = () => {
+        // Define the real global callback for Spotify SDK
+        const initPlayer = () => {
             if (player) return // Already initialized
 
             const newPlayer = new (window as any).Spotify.Player({
@@ -88,9 +97,11 @@ export default function MusicPage() {
             setPlayer(newPlayer);
         };
 
+        (window as any).onSpotifyWebPlaybackSDKReady = initPlayer;
+
         // If Spotify is already loaded, trigger the callback manually
         if ((window as any).Spotify) {
-            (window as any).onSpotifyWebPlaybackSDKReady();
+            initPlayer();
         }
 
         setIsSDKReady(true);

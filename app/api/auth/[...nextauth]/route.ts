@@ -9,6 +9,10 @@ const scopes = [
     "user-modify-playback-state",
 ].join(" ")
 
+if (!process.env.NEXTAUTH_SECRET) {
+    console.error("CRITICAL: NEXTAUTH_SECRET is not defined in environment variables.");
+}
+
 const handler = NextAuth({
     secret: process.env.NEXTAUTH_SECRET,
     providers: [

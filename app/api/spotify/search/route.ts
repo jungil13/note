@@ -5,6 +5,11 @@ const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
 export async function GET(request: NextRequest) {
+    if (!CLIENT_ID || !CLIENT_SECRET) {
+        console.error("Missing Spotify credentials in environment variables");
+        return NextResponse.json({ error: 'Server configuration error: Missing Spotify credentials' }, { status: 500 })
+    }
+
     const searchParams = request.nextUrl.searchParams
     const query = searchParams.get('q')
     const type = searchParams.get('type') || 'track'
